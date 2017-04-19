@@ -26,18 +26,18 @@ var db = require("./database.js");
 function displayAllocations(req,res,next)
 {
    var userId = req.params.userId;
-   
+
    var threshold = req.query.threshold;
- 
-   var q = "SELECT * FROM Allocations WHERE userId = " + userId;
+
+   var q = "SELECT * FROM Allocations WHERE userId=$1;";
    if (threshold) {
        var thint = threshold*1;
        if (thint >= 0 && thint <= 99) {
            q += " AND stocks > " + thint;
         }
     }
-   
-   db.query(q,function(e1,d1) { displayAllocations1(req,res,next,e1,d1); } );
+
+   db.query(q,[userId],function(e1,d1) { displayAllocations1(req,res,next,e1,d1); } );
 }
 
 
